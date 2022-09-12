@@ -1,0 +1,48 @@
+---
+title: "scpi-test"
+author: "Julia Lawson, UCSB"
+date: "2022-09-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(here)
+library(scpi)
+
+stocksci <- read.csv(here("swordnatl.csv"))
+
+data <- stocksci
+
+id.var      <- "stockid"                             # ID variable
+time.var    <- "year"                                # Time variable
+period.pre  <- (1951:1996)   # Pre-treatment period
+period.post <- (1997:2012)                           # Post-treatment period
+unit.tr     <- "SWORDNATL"                      # Treated unit (in terms of id.var)
+unit.co     <- unique(data$stockid) [-15]             # Donors pool
+outcome.var <- "UdivUmsypref"                        # Outcome variable
+constant    <- TRUE                                 # No constant term
+cointegrated.data <- TRUE                            # Belief that the data are cointegrated
+
+
+####################################
+### Data preparation
+df_swordnatl  <-   scdata(df = data, id.var = id.var, time.var = time.var, outcome.var = outcome.var,
+                period.pre = period.pre, period.post = period.post,
+                unit.tr = unit.tr, unit.co = unit.co, 
+                constant = constant,  cointegrated.data = cointegrated.data)
+
+est.si  <- scest(data = df_swordnatl, w.constr = list(name="simplex"))
+scplot(result = est.si)
+
+#################################
+### Quantify Uncertainty
+
+res.pi_swordnatl_fish <- scpi(df_swordnatl, w.constr = list(name = "simplex"), cores = 1, sims = 10, rho.max=0, e.order=0, e.lags=0, u.order=0, u.lags=0)
+
+scplot(res.pi_swordnatl_fish)
+
+```
+
+
+
