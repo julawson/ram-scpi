@@ -10,16 +10,16 @@ library(tidyverse)
 library(here)
 library(scpi)
 
-stocksci <- read.csv(here("swordnatl.csv"))
+stocksci <- read.csv(here("ram.export.csv"))
 
 data <- stocksci
 
 id.var      <- "stockid"                             # ID variable
 time.var    <- "year"                                # Time variable
 period.pre  <- (1951:1996)   # Pre-treatment period
-period.post <- (1997:2012)                           # Post-treatment period
+period.post <- (1997:2010)                           # Post-treatment period
 unit.tr     <- "SWORDNATL"                      # Treated unit (in terms of id.var)
-unit.co     <- unique(data$stockid) [-15]             # Donors pool
+unit.co     <- unique(data$stockid) [-14]             # Donors pool
 outcome.var <- "UdivUmsypref"                        # Outcome variable
 constant    <- TRUE                                 # No constant term
 cointegrated.data <- TRUE                            # Belief that the data are cointegrated
