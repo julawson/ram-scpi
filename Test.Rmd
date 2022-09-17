@@ -21,6 +21,7 @@ period.post <- (1997:2010)                           # Post-treatment period
 unit.tr     <- "SWORDNATL"                      # Treated unit (in terms of id.var)
 unit.co     <- unique(data$stockid) [-14]             # Donors pool
 outcome.var <- "UdivUmsypref"                        # Outcome variable
+features <- list("UdivUmsypref"=c("price","sst_c"))
 constant    <- TRUE                                 # No constant term
 cointegrated.data <- TRUE                            # Belief that the data are cointegrated
 
@@ -29,7 +30,7 @@ cointegrated.data <- TRUE                            # Belief that the data are 
 ### Data preparation
 df_swordnatl  <-   scdata(df = data, id.var = id.var, time.var = time.var, outcome.var = outcome.var,
                 period.pre = period.pre, period.post = period.post,
-                unit.tr = unit.tr, unit.co = unit.co, 
+                unit.tr = unit.tr, unit.co = unit.co, features = features,
                 constant = constant,  cointegrated.data = cointegrated.data)
 
 est.si  <- scest(data = df_swordnatl, w.constr = list(name="simplex"))
